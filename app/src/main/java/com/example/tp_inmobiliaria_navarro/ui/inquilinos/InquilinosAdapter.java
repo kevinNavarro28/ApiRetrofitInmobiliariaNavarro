@@ -45,7 +45,7 @@ public class InquilinosAdapter extends RecyclerView.Adapter<InquilinosAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull InquilinosAdapter.ViewHolder holder, int position) {
 
-        Glide.with(context).load(Inmueble.get(position).getImagen()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.foto);
+        Glide.with(context).load(Inmueble.get(position).getImagenUrl()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.foto);
         holder.direccion.setText(Inmueble.get(position).getDireccion());
 
     }

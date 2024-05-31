@@ -3,16 +3,19 @@ package com.example.tp_inmobiliaria_navarro.ui.perfil;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.example.tp_inmobiliaria_navarro.R;
 import com.example.tp_inmobiliaria_navarro.modelo.Propietario;
-import com.example.tp_inmobiliaria_navarro.request.ApiClient;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PerfilViewModel extends AndroidViewModel {
     private Context context;
@@ -21,10 +24,11 @@ public class PerfilViewModel extends AndroidViewModel {
 
 
 
-    private ApiClient api = ApiClient.getApi();
+
+
     public PerfilViewModel(@NonNull Application application) {
         super(application);
-        this.context = application;
+        this.context = application.getApplicationContext();
 
     }
     public LiveData<Propietario> getpropietarioM(){
@@ -37,28 +41,67 @@ public class PerfilViewModel extends AndroidViewModel {
 
 
     public  void LeerPropietario(){
-        Propietario pro = api.obtenerUsuarioActual();
-        Log.d("salida", String.valueOf(pro.getNombre()));
-        if(pro!=null){
-            propietarioM.setValue(pro);
+        String token = ApiClientRetrofit.leerToken(getApplication());
+        if(token!= null){
+            ApiClientRetrofit.MisEndpoint api = ApiClientRetrofit.getEndPoint();
+            Call<Propietario> call = api.miPerfil(token);
+            call.enqueue(new Callback<Propietario>() {
+                @Override
+                public void onResponse(Call<Propietario> call, Response<Propietario> response) {
+                    if(response.isSuccessful()){
+                        propietarioM.postValue(response.body());
+                    }else{
+                        Log.d("salida","Incorrecto");
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Propietario> call, Throwable throwable) {
+                    Log.d("salida","Falla:"+throwable.getMessage());
+                }
+            });
+
         }
-    }
-
-    public void ActuPropietario(String id,String dni , String nombre,String apellido,String mail , String clave , String telefono,int avatar){
-        Propietario propietario = new Propietario(Integer.parseInt(id),Long.parseLong(dni),nombre,apellido,mail,clave,telefono,avatar);
-        api.actualizarPerfil(propietario);
-        propietarioM.setValue(propietario);
 
     }
-
-
 
     public LiveData<Boolean> getEditable() {
         return Editable;
     }
 
-    public void Actualizar() {
-        Editable.setValue(!Editable.getValue());
+
+
+    public void Actualizar(Propietario propietario) {
+            if(!Editable.getValue()){
+                Editable.setValue(true);
+            }else {
+
+            Editable.setValue(false);
+            String token = ApiClientRetrofit.leerToken(getApplication());
+            if (token != null) {
+                ApiClientRetrofit.MisEndpoint api = ApiClientRetrofit.getEndPoint();
+                Call<Propietario> call = api.modificarUsuario(token, propietario);
+                call.enqueue(new Callback<Propietario>() {
+                    @Override
+                    public void onResponse(Call<Propietario> call, Response<Propietario> response) {
+                        if (response.isSuccessful()) {
+                            propietarioM.postValue(response.body());
+                            Toast.makeText(getApplication(), "Perfil Actualizado", Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.d("salida", "Incorrecto");
+                            Toast.makeText(getApplication(), "No Actualizo ", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Propietario> call, Throwable throwable) {
+                        Log.d("salida", "Falla:" + throwable.getMessage());
+                    }
+                });
+
+            }
+            }
+        }
     }
 
 
@@ -68,4 +111,3 @@ public class PerfilViewModel extends AndroidViewModel {
 
 
 
-}

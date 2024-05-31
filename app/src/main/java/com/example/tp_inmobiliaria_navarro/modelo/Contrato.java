@@ -1,34 +1,35 @@
 package com.example.tp_inmobiliaria_navarro.modelo;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 
 public class Contrato implements Serializable {
 
-    private int idContrato;
+    private int id;
     private String fechaInicio;
     private String fechaFin;
-    private double montoAlquiler;
+    private double precio;
     private Inquilino inquilino;
     private Inmueble inmueble;
 
-    public Contrato() {}
-    public Contrato(int idContrato, String fechaInicio, String fechaFin, double montoAlquiler, Inquilino inquilino, Inmueble inmueble) {
-        this.idContrato = idContrato;
+
+    public Contrato(int id, String fechaInicio, String fechaFin, double precio, Inquilino inquilino, Inmueble inmueble) {
+        this.id = id;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
-        this.montoAlquiler = montoAlquiler;
+        this.precio = precio;
         this.inquilino = inquilino;
         this.inmueble = inmueble;
     }
 
     public int getIdContrato() {
-        return idContrato;
+        return id;
     }
 
     public void setIdContrato(int idContrato) {
-        this.idContrato = idContrato;
+        this.id = idContrato;
     }
 
     public String getFechaInicio() {
@@ -47,12 +48,12 @@ public class Contrato implements Serializable {
         this.fechaFin = fechaFin;
     }
 
-    public double getMontoAlquiler() {
-        return montoAlquiler;
+    public double getprecio() {
+        return precio;
     }
 
-    public void setMontoAlquiler(double montoAlquiler) {
-        this.montoAlquiler = montoAlquiler;
+    public void setprecio(double precio) {
+        this.precio = precio;
     }
 
 
@@ -77,11 +78,11 @@ public class Contrato implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contrato contrato = (Contrato) o;
-        return idContrato == contrato.idContrato;
+        return id == contrato.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idContrato);
+        return Objects.hash(id);
     }
 }

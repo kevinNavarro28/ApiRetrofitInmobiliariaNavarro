@@ -11,9 +11,14 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.tp_inmobiliaria_navarro.modelo.Contrato;
 import com.example.tp_inmobiliaria_navarro.modelo.Pago;
-import com.example.tp_inmobiliaria_navarro.request.ApiClient;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetallePagosViewModel extends AndroidViewModel {
     private MutableLiveData<ArrayList<Pago>> pagosM;
@@ -22,7 +27,7 @@ public class DetallePagosViewModel extends AndroidViewModel {
 
     private Context context;
 
-    private ApiClient api = ApiClient.getApi();
+
 
 
     public DetallePagosViewModel(@NonNull Application application) {
@@ -38,11 +43,24 @@ public class DetallePagosViewModel extends AndroidViewModel {
         return pagosM;
     }
 
-    public  void obtenerPago(Bundle bundle){
-        Contrato contrato = (Contrato) bundle.getSerializable("contrato");
-        pagos = new ArrayList<Pago>();
-        pagos =  api.obtenerPagos(contrato);
-        pagosM.setValue(pagos);
+    public  void obtenerPago(){
+        ApiClientRetrofit.MisEndpoint mep = ApiClientRetrofit.getEndPoint();
+        String token = ApiClientRetrofit.leerToken(getApplication().getApplicationContext());
+        Call<List<Pago>> call = mep.traerPagos(token);
+        call.enqueue(new Callback<List<Pago>>() {
+            @Override
+            public void onResponse(Call<List<Pago>> call, Response<List<Pago>> response) {
+                if(response.isSuccessful()){
+                    pagosM.postValue((ArrayList<Pago>) response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Pago>> call, Throwable throwable) {
+
+            }
+        });
+
     }
 
 }

@@ -1,11 +1,16 @@
 package com.example.tp_inmobiliaria_navarro.ui.logout;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
 
 public class Logout {
 
@@ -17,8 +22,10 @@ public class Logout {
                 .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                      ApiClientRetrofit.borrarToken(context);
                         ((AppCompatActivity) context).finishAndRemoveTask();
                         context.finishAffinity();
+
 
                     }
                 })
@@ -31,4 +38,9 @@ public class Logout {
                 .show();
 
     }
-}
+
+
+
+
+    }
+

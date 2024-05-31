@@ -46,10 +46,11 @@ public class DetallePagosAdapter extends RecyclerView.Adapter<com.example.tp_inm
     @Override
     public void onBindViewHolder(@NonNull com.example.tp_inmobiliaria_navarro.ui.contratos.DetallePagosAdapter.ViewHolder holder, int position) {
         holder.codigopago.setText(Pago.get(position).getIdPago()+"");
-        holder.numeropago.setText(Pago.get(position).getNumero()+"");
+        holder.numeropago.setText(Pago.get(position).getNroPago()+"");
         holder.condigocontrato.setText(Pago.get(position).getContrato().getIdContrato()+"");
         holder.importe.setText(Pago.get(position).getImporte()+"");
-        holder.fechadedpago.setText(Pago.get(position).getFechaDePago());
+        String fechaFormateada = Formateo_Date.formatDate(Pago.get(position).getFechaPago());
+        holder.fechadedpago.setText(fechaFormateada);
 
     }
 

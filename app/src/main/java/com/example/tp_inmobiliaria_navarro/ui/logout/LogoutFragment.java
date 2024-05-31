@@ -1,5 +1,6 @@
 package com.example.tp_inmobiliaria_navarro.ui.logout;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,11 @@ public class LogoutFragment extends Fragment {
         View root = binding.getRoot();
 
         Logout.salirDialogo(getActivity());
+
+
+
+
+
 
         return root;
     }

@@ -8,19 +8,21 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.tp_inmobiliaria_navarro.modelo.Contrato;
 import com.example.tp_inmobiliaria_navarro.modelo.Inmueble;
-import com.example.tp_inmobiliaria_navarro.modelo.Inquilino;
-import com.example.tp_inmobiliaria_navarro.request.ApiClient;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ContratosResultadoViewModel extends AndroidViewModel {
     private MutableLiveData<Contrato> contratoM;
 
     private Context context;
 
-    private ApiClient api = ApiClient.getApi();
+
 
 
     public ContratosResultadoViewModel(@NonNull Application application) {
@@ -37,9 +39,13 @@ public class ContratosResultadoViewModel extends AndroidViewModel {
     }
 
     public  void obtenerContrato(Bundle bundle){
-        Inmueble inmueble = (Inmueble) bundle.getSerializable("inmueble");
-       Contrato contrato = api.obtenerContratoVigente(inmueble);
-        contratoM.setValue(contrato);
+        Contrato contrato = (Contrato) bundle.getSerializable("contrato");
+        contratoM.postValue(contrato);
+
+
+
     }
+
+
 
 }

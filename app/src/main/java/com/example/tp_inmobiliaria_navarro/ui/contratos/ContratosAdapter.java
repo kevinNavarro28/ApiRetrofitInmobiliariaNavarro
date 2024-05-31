@@ -2,6 +2,7 @@ package com.example.tp_inmobiliaria_navarro.ui.contratos;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tp_inmobiliaria_navarro.R;
+import com.example.tp_inmobiliaria_navarro.modelo.Contrato;
 import com.example.tp_inmobiliaria_navarro.modelo.Inmueble;
+import com.example.tp_inmobiliaria_navarro.modelo.Inquilino;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContratosAdapter extends RecyclerView.Adapter<com.example.tp_inmobiliaria_navarro.ui.contratos.ContratosAdapter.ViewHolder>  {
@@ -25,11 +32,13 @@ public class ContratosAdapter extends RecyclerView.Adapter<com.example.tp_inmobi
     private Context context;
     private LayoutInflater inflater;
 
-    private List<com.example.tp_inmobiliaria_navarro.modelo.Inmueble> Inmueble ;
+    private ArrayList<Contrato> listaContrato;
 
-    public ContratosAdapter(Context context,List<Inmueble> Inmueble,LayoutInflater inflater){
+
+
+    public ContratosAdapter(Context context, ArrayList<Contrato> listaContrato, LayoutInflater inflater){
         this.context= context;
-        this.Inmueble =Inmueble;
+        this.listaContrato = listaContrato;
         this.inflater=inflater;
 
     }
@@ -43,15 +52,21 @@ public class ContratosAdapter extends RecyclerView.Adapter<com.example.tp_inmobi
 
     @Override
     public void onBindViewHolder(@NonNull com.example.tp_inmobiliaria_navarro.ui.contratos.ContratosAdapter.ViewHolder holder, int position) {
-
-        Glide.with(context).load(Inmueble.get(position).getImagen()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.foto);
-        holder.direccion.setText(Inmueble.get(position).getDireccion());
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.inmueble)
+                .error(R.drawable.inmueble);
+        Glide.with(context)
+                .load(ApiClientRetrofit.URL+listaContrato.get(position).getInmueble().getImagenUrl())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(options)
+                .into(holder.foto);
+        holder.direccion.setText(listaContrato.get(position).getInmueble().getDireccion());
 
     }
 
     @Override
     public int getItemCount( ) {
-        return Inmueble.size();
+        return listaContrato.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,8 +87,8 @@ public class ContratosAdapter extends RecyclerView.Adapter<com.example.tp_inmobi
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    Inmueble inmu = Inmueble.get(getLayoutPosition());
-                    bundle.putSerializable("inmueble",inmu);
+                    Contrato contrato = listaContrato.get(getLayoutPosition());
+                    bundle.putSerializable("contrato",contrato);
                     Navigation.findNavController(v).navigate(R.id.action_nav_contratos_to_contratosResultado,bundle);
                 }
             });

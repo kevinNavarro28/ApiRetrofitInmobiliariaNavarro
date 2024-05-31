@@ -6,10 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.tp_inmobiliaria_navarro.modelo.Inmueble;
-import com.example.tp_inmobiliaria_navarro.request.ApiClient;
 
 import java.util.ArrayList;
 
@@ -17,7 +15,7 @@ public class InquilinosViewModel extends AndroidViewModel {
     private ArrayList<Inmueble> inmuebles ;
     private MutableLiveData<ArrayList<Inmueble>> lista;
 
-    private ApiClient api = ApiClient.getApi();
+
 
 
 
@@ -35,9 +33,7 @@ public class InquilinosViewModel extends AndroidViewModel {
     }
 
     public void obtenerInmuebleAlquilados(){
-        inmuebles = new ArrayList<>();
-        inmuebles = api.obtenerPropiedadesAlquiladas();
-        lista.setValue(inmuebles);
+
     }
 
 

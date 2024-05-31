@@ -35,19 +35,13 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         mv = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(MenuActivityViewModel.class);
         setSupportActionBar(binding.appBarMenu.toolbar);
-        binding.appBarMenu.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_inicio, R.id.nav_perfil, R.id.nav_inmuebles, R.id.nav_inquilinos, R.id.nav_contratos,R.id.nav_logout)
+                R.id.nav_inicio, R.id.nav_perfil, R.id.nav_inmuebles, R.id.nav_contratos,R.id.nav_logout)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -60,8 +54,7 @@ public class MenuActivity extends AppCompatActivity {
             TextView TvNombreApellido = binding.navView.getHeaderView(0).findViewById(R.id.TvNombreApellido);
             TvNombreApellido.setText(propietario.getNombre()+" "+propietario.getApellido());
 
-            ImageView Imgpropi = binding.navView.getHeaderView(0).findViewById(R.id.ImgPropietario);
-            Imgpropi.setImageResource(propietario.getAvatar());
+
 
         });
         mv.obtenerpropietario();
@@ -87,4 +80,6 @@ public class MenuActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
 }

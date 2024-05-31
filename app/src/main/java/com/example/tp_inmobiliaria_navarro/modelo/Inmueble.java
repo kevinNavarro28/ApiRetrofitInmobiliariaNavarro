@@ -5,37 +5,55 @@ import java.util.Objects;
 
 public class Inmueble implements Serializable {
 
-    private int idInmueble;
+    private int id;
     private String direccion;
-    private String uso;
-    private String tipo;
     private int ambientes;
+
+    private int superficie;
+
+    private String tipo;
+    private String uso;
+
     private double precio;
     private Propietario propietario;
     //En falso significa que el innmueble no está disponible por alguna falla en el mismo.
-    private boolean estado=true;
-    private String imagen;
+    private boolean disponible;
 
-    public Inmueble(int idInmueble, String direccion, String uso, String tipo, int ambientes, double precio, Propietario propietario, boolean estado, String imagen) {
-        this.idInmueble = idInmueble;
+    private String imagenUrl;
+
+    public Inmueble(int id,String direccion, int ambientes, int superficie, String tipo, String uso, double precio, boolean disponible, String imagenUrl) {
+        this.id=id;
         this.direccion = direccion;
-        this.uso = uso;
-        this.tipo = tipo;
         this.ambientes = ambientes;
+        this.superficie = superficie;
+        this.tipo = tipo;
+        this.uso = uso;
         this.precio = precio;
-        this.propietario = propietario;
-        this.estado = estado;
-        this.imagen = imagen;
+        this.disponible = disponible;
+        this.imagenUrl = imagenUrl;
     }
-    public Inmueble() {
+
+
+    public Inmueble(String direccion, int ambientes, int superficie, String tipo, String uso, double precio, Boolean disponible) {
+        this.direccion = direccion;
+        this.ambientes = ambientes;
+        this.superficie = superficie;
+        this.tipo = tipo;
+        this.uso = uso;
+        this.precio = precio;
+        this.disponible = disponible;
 
     }
+
+
+
+
     public int getIdInmueble() {
-        return idInmueble;
+        return id;
     }
 
     public void setIdInmueble(int idInmueble) {
-        this.idInmueble = idInmueble;
+        this.id = idInmueble;
     }
 
     public String getDireccion() {
@@ -70,6 +88,10 @@ public class Inmueble implements Serializable {
         this.ambientes = ambientes;
     }
 
+    public int getSuperficie(){return superficie;}
+
+    public void setSuperficie(int superficie){this.superficie=superficie;}
+
     public double getPrecio() {
         return precio;
     }
@@ -86,20 +108,20 @@ public class Inmueble implements Serializable {
         this.propietario = propietario;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public boolean getDisponible() {
+        return disponible;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
-    public String getImagen() {
-        return imagen;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
+    public void setImagenUrl(String imagen) {
+        this.imagenUrl = imagen;
     }
 
     @Override
@@ -107,11 +129,11 @@ public class Inmueble implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Inmueble inmueble = (Inmueble) o;
-        return idInmueble == inmueble.idInmueble;
+        return id == inmueble.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idInmueble);
+        return Objects.hash(id);
     }
 }

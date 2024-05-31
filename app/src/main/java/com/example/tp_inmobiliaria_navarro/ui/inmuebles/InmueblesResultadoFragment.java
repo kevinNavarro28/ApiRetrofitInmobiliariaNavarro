@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.example.tp_inmobiliaria_navarro.R;
 import com.example.tp_inmobiliaria_navarro.databinding.FragmentInmueblesResultadoBinding;
 import com.example.tp_inmobiliaria_navarro.modelo.Inmueble;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
 
 public class InmueblesResultadoFragment extends Fragment {
 
@@ -40,14 +42,15 @@ public class InmueblesResultadoFragment extends Fragment {
         mViewModel.getunmum().observe(getViewLifecycleOwner(), new Observer<Inmueble>() {
             @Override
             public void onChanged(Inmueble inmueble) {
-                binding.EtCodigoInmueble.setText(inmueble.getIdInmueble()+"");
+                binding.EtSuperficie.setText(inmueble.getSuperficie()+"");
                 binding.EtAmbientes.setText(inmueble.getAmbientes()+"");
                 binding.EtDireccion.setText(inmueble.getDireccion());
                 binding.EtPrecio.setText(String.valueOf(inmueble.getPrecio()));
                 binding.EtTipo.setText(inmueble.getTipo());
                 binding.EtUso.setText(inmueble.getUso());
-                binding.CbDisponible.setChecked(inmueble.isEstado());
-                Glide.with(InmueblesResultadoFragment.this).load(inmueble.getImagen()).into(binding.Imginmueble);
+                binding.CbDisponible.setChecked(inmueble.getDisponible());
+                Glide.with(InmueblesResultadoFragment.this).load(ApiClientRetrofit.URL+inmueble.getImagenUrl()).into(binding.ImgInmueble);
+                Log.d("img",inmueble.getImagenUrl());
                 inmuebleactual=inmueble;
 
             }
@@ -56,10 +59,8 @@ public class InmueblesResultadoFragment extends Fragment {
         binding.CbDisponible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               boolean disponible = binding.CbDisponible.isChecked();
-               inmuebleactual.setEstado(disponible);
-               mViewModel.ActuInmueble(inmuebleactual);
 
+                mViewModel.cambiarDisponibilidad(inmuebleactual);
             }
         });
 

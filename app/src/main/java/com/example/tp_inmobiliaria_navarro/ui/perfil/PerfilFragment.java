@@ -1,18 +1,21 @@
 package com.example.tp_inmobiliaria_navarro.ui.perfil;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 
+import com.example.tp_inmobiliaria_navarro.MenuActivity;
+import com.example.tp_inmobiliaria_navarro.R;
 import com.example.tp_inmobiliaria_navarro.databinding.FragmentPerfilBinding;
 import com.example.tp_inmobiliaria_navarro.modelo.Propietario;
 
@@ -38,14 +41,12 @@ public class PerfilFragment extends Fragment {
             public void onChanged(Propietario propietario) {
                 pro=propietario;
                 Log.d("salida fragment", String.valueOf(propietario.getId()));
-                binding.EtCodigoPerfil.setText(String.valueOf(propietario.getId()));
                 binding.EtDniPerfil.setText(String.valueOf(propietario.getDni()));
                 binding.EtNombrePerfil.setText(propietario.getNombre());
                 binding.EtApellidoPerfil.setText(propietario.getApellido());
                 binding.EtMailPerfil.setText(propietario.getEmail());
-                binding.EtClavePerfil.setText(propietario.getContraseña());
                 binding.EtTelefono.setText(propietario.getTelefono());
-                binding.ImgFoto.setImageResource(propietario.getAvatar());
+
 
 
             }
@@ -54,19 +55,14 @@ public class PerfilFragment extends Fragment {
         binding.btEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mv.Actualizar();
-                mv.ActuPropietario(
-                        binding.EtCodigoPerfil.getText().toString(),
-                        binding.EtDniPerfil.getText().toString(),
-                        binding.EtNombrePerfil.getText().toString(),
-                        binding.EtApellidoPerfil.getText().toString(),
-                        binding.EtMailPerfil.getText().toString(),
-                        binding.EtClavePerfil.getText().toString(),
-                        binding.EtTelefono.getText().toString(),
-                        pro.getAvatar()
 
-
-                );
+                Propietario pro = new Propietario();
+                        pro.setDni(binding.EtDniPerfil.getText().toString());
+                        pro.setNombre(binding.EtNombrePerfil.getText().toString());
+                        pro.setApellido(binding.EtApellidoPerfil.getText().toString());
+                        pro.setTelefono(binding.EtTelefono.getText().toString());
+                        pro.setEmail(binding.EtMailPerfil.getText().toString());
+                        mv.Actualizar(pro);
 
             }
         });
@@ -78,20 +74,24 @@ public class PerfilFragment extends Fragment {
                 binding.EtNombrePerfil.setEnabled(aBoolean);
                 binding.EtApellidoPerfil.setEnabled(aBoolean);
                 binding.EtMailPerfil.setEnabled(aBoolean);
-                binding.EtClavePerfil.setEnabled(aBoolean);
                 binding.EtTelefono.setEnabled(aBoolean);
-
                 binding.btEditar.setText(aBoolean ? "Guardar" : "Editar");
             }
         });
 
 
 
-
-
         mv.LeerPropietario();
 
+        binding.BtClave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.action_nav_perfil_to_cambiarClaveFragment);
 
+
+
+            }
+        });
 
 
         return root;
@@ -102,4 +102,7 @@ public class PerfilFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
+
 }

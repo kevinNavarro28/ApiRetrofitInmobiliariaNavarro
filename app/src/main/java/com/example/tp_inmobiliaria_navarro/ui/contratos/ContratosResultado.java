@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,9 @@ import com.example.tp_inmobiliaria_navarro.R;
 import com.example.tp_inmobiliaria_navarro.databinding.FragmentContratosResultadoBinding;
 import com.example.tp_inmobiliaria_navarro.databinding.FragmentInquilinosResultadoBinding;
 import com.example.tp_inmobiliaria_navarro.modelo.Contrato;
+import com.example.tp_inmobiliaria_navarro.modelo.Inquilino;
 import com.example.tp_inmobiliaria_navarro.ui.inquilinos.InquilinosResultadoViewModel;
+import com.example.tp_inmobiliaria_navarro.ui.contratos.*;
 
 public class ContratosResultado extends Fragment {
 
@@ -26,6 +29,8 @@ public class ContratosResultado extends Fragment {
     private FragmentContratosResultadoBinding binding;
 
     private Contrato contratoActual = null;
+
+    private Inquilino inquilinoActual = null;
 
     public static ContratosResultado newInstance() {
         return new ContratosResultado();
@@ -42,13 +47,20 @@ public class ContratosResultado extends Fragment {
         mViewModel.getcontratoM().observe(getViewLifecycleOwner(), new Observer<Contrato>() {
             @Override
             public void onChanged(Contrato contrato) {
-                binding.EtCodigoContrato.setText(contrato.getIdContrato()+"");
-                binding.EtFechaInicio.setText(contrato.getFechaInicio());
-                binding.EtFechaFinalizacion.setText(contrato.getFechaFin());
-                binding.EtMontoalquiler.setText(contrato.getMontoAlquiler()+"");
-                binding.EtInquilino.setText(contrato.getInquilino().getNombre()+" "+contrato.getInquilino().getApellido());
-                binding.EtInmueble.setText("Inmueble en "+contrato.getInmueble().getDireccion());
+                String formattedFechaInicio = Formateo_Date.formatDate(contrato.getFechaInicio());
+                String formattedFechaFin = Formateo_Date.formatDate(contrato.getFechaFin());
+                Log.d("contrato", String.valueOf(contrato.getprecio()));
+
+                binding.EtFechaInicio.setText(formattedFechaInicio);
+                binding.EtFechaFinalizacion.setText(formattedFechaFin);
+
+               binding.EtMontoalquiler.setText(contrato.getprecio()+"");
+               binding.EtInquilino.setText(contrato.getInquilino().getNombre()+" "+contrato.getInquilino().getApellido());
+               binding.EtInmueble.setText(contrato.getInmueble().getDireccion());
+
                 contratoActual= contrato;
+                inquilinoActual =contrato.getInquilino();
+
             }
         });
 
@@ -61,6 +73,16 @@ public class ContratosResultado extends Fragment {
                 bundle1.putSerializable("contrato",contratoActual);
                 Navigation.findNavController(v).navigate(R.id.action_contratosResultado_to_detallePagos,bundle1);
 
+            }
+        });
+
+        binding.BtDetalleInquilino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle2 = new Bundle();
+                bundle2.putSerializable("inquilino",inquilinoActual);
+                Log.d("inquilino2",inquilinoActual.getNombre());
+                Navigation.findNavController(v).navigate(R.id.action_contratosResultado_to_inquilinosResultado,bundle2);
             }
         });
 

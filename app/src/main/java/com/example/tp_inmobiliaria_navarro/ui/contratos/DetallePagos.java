@@ -51,7 +51,7 @@ public class DetallePagos extends Fragment {
                 rv.setAdapter(adapter);
             }
         });
-        mViewModel.obtenerPago(bundle);
+        mViewModel.obtenerPago();
 
 
 

@@ -41,10 +41,10 @@ public class InquilinosResultado extends Fragment {
         mViewModel.getinquiM().observe(getViewLifecycleOwner(), new Observer<Inquilino>() {
             @Override
             public void onChanged(Inquilino inquilino) {
-                binding.EtCodigoInquilino.setText(inquilino.getIdInquilino()+"");
+
                 binding.EtNombreInquilino.setText(inquilino.getNombre());
                 binding.EtApellidoInquilino.setText(inquilino.getApellido());
-                binding.EtDniInquilino.setText(Math.toIntExact(inquilino.getDNI())+"");
+                binding.EtDniInquilino.setText(inquilino.getDni()+"");
                 binding.EtEmailInquilino.setText(inquilino.getEmail());
                 binding.EtTelefonoInquilino.setText(inquilino.getTelefono());
                 binding.EtGaranteInquilino.setText(inquilino.getNombreGarante());

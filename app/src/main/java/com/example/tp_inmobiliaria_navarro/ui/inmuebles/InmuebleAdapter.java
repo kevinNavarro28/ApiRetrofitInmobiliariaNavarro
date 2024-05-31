@@ -2,6 +2,7 @@ package com.example.tp_inmobiliaria_navarro.ui.inmuebles;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tp_inmobiliaria_navarro.R;
 import com.example.tp_inmobiliaria_navarro.modelo.Inmueble;
+import com.example.tp_inmobiliaria_navarro.request.ApiClientRetrofit;
 
 import java.util.List;
 
@@ -43,14 +46,20 @@ public class InmuebleAdapter extends RecyclerView.Adapter<com.example.tp_inmobil
 
         @Override
         public void onBindViewHolder(@NonNull com.example.tp_inmobiliaria_navarro.ui.inmuebles.InmuebleAdapter.ViewHolder holder, int position) {
+            Inmueble inmueble = Inmueble.get(position);
+            holder.precio.setText(String.valueOf(inmueble.getPrecio()));
+            holder.direccion.setText(inmueble.getDireccion());
+            String imageUrl = ApiClientRetrofit.URL+inmueble.getImagenUrl();
+            Log.d("imagen",imageUrl);
+            RequestOptions options = new RequestOptions()
+                    .placeholder(R.drawable.inmueble)
+                            .error(R.drawable.inmueble);
 
-            Glide.with(context).load(Inmueble.get(position).getImagen()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.foto);
-            holder.direccion.setText(Inmueble.get(position).getDireccion());
-            double precio = Inmueble.get(position).getPrecio();
-            String precioString = String.valueOf(precio);
-            holder.precio.setText(precioString);
-
-
+            Glide.with(context)
+                    .load(imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .apply(options)
+                    .into(holder.foto);
 
         }
 
