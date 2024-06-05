@@ -21,7 +21,7 @@ public class Inmueble implements Serializable {
 
     private String imagenUrl;
 
-    public Inmueble(int id,String direccion, int ambientes, int superficie, String tipo, String uso, double precio, boolean disponible, String imagenUrl) {
+    public Inmueble() {
         this.id=id;
         this.direccion = direccion;
         this.ambientes = ambientes;

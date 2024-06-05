@@ -27,71 +27,61 @@ import retrofit2.Response;
 
 public class AgregaInmuebleViewModel extends AndroidViewModel {
 
-    private MutableLiveData<String> validationMessage = new MutableLiveData<>();
+   
+
 
     public AgregaInmuebleViewModel(@NonNull Application application) {
         super(application);
     }
-    public LiveData<String> getValidationMessage() {
-        return validationMessage;
-    }
-    public boolean validarCampos(String direccion, Integer ambientesStr,Integer superficieStr, Double precioStr, String tipo, String uso, Uri imageUri) {
-        if (direccion.isEmpty() || (ambientesStr==null) || superficieStr==null || precioStr==null || tipo == null || uso == null) {
-            validationMessage.setValue("Por favor, complete todos los campos");
-            return false;
-        }
-
-        try {
-            Integer.parseInt(String.valueOf(ambientesStr));
-            Integer.parseInt(String.valueOf(superficieStr));
-            Double.parseDouble(String.valueOf(precioStr));
-        } catch (NumberFormatException e) {
-            validationMessage.setValue("Por favor, ingrese valores numéricos válidos");
-            return false;
-        }
-
-        return true;
-    }
 
 
-    public void crearInmuebleRetro(Inmueble inmueble, Uri imageUri){
-        String token = ApiClientRetrofit.leerToken(getApplication());
-        ApiClientRetrofit.MisEndpoint api = ApiClientRetrofit.getEndPoint();
-        RequestBody Direccion = RequestBody.create(MediaType.parse("application/json"),inmueble.getDireccion());
-        RequestBody Ambientes = RequestBody.create(MediaType.parse("application/json"),inmueble.getAmbientes()+"");
-        RequestBody Superficie = RequestBody.create(MediaType.parse("application/json"),inmueble.getSuperficie()+"");
-        RequestBody Tipo = RequestBody.create(MediaType.parse("application/json"),inmueble.getTipo());
-        RequestBody Uso = RequestBody.create(MediaType.parse("application/json"),inmueble.getUso());
-        RequestBody precio = RequestBody.create(MediaType.parse("application/json"),inmueble.getPrecio()+"");
-        RequestBody Disponibe = RequestBody.create(MediaType.parse("application/json"),inmueble.getDisponible()+"");
 
-        String rutaArchivo = RealPathUtil.getRealPath(getApplication(),imageUri);
-        File archivo = new File(rutaArchivo);
 
-        RequestBody Imagen = RequestBody.create(MediaType.parse("multipart/form-data"),archivo);
-        MultipartBody.Part ImagenFile = MultipartBody.Part.createFormData("imagenFile",archivo.getName(),Imagen);
+    public void crearInmuebleRetro(Inmueble inmueble, String direccion , String ambientes , String superficie , String precios, Uri imageUri) {
+        if (direccion.isEmpty() || ambientes.isEmpty() || superficie.isEmpty()||precios.isEmpty()) {
+            Toast.makeText(getApplication(), "Ingrese los datos correctamente para agregar un inmueble", Toast.LENGTH_LONG).show();
+        } else if (imageUri == null) {
+            Toast.makeText(getApplication(), "Debe de ingresas una foto para agreagr un inmueble", Toast.LENGTH_LONG).show();
+        } else {
 
-        Call<Inmueble> call = api.crearInmueble(token,Direccion,
-                Ambientes,
-                Superficie,
-                Tipo,
-                Uso,
-                precio,
-                Disponibe,
-                ImagenFile);
-        call.enqueue(new Callback<Inmueble>() {
-            @Override
-            public void onResponse(Call<Inmueble> call, Response<Inmueble> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(getApplication(),"Se agrego correctamente",Toast.LENGTH_LONG).show();
+            String token = ApiClientRetrofit.leerToken(getApplication());
+            ApiClientRetrofit.MisEndpoint api = ApiClientRetrofit.getEndPoint();
+            RequestBody Direccion = RequestBody.create(MediaType.parse("application/json"), direccion+"");
+            RequestBody Ambientes = RequestBody.create(MediaType.parse("application/json"), ambientes+"" );
+            RequestBody Superficie = RequestBody.create(MediaType.parse("application/json"), superficie+"");
+            RequestBody Tipo = RequestBody.create(MediaType.parse("application/json"), inmueble.getTipo());
+            RequestBody Uso = RequestBody.create(MediaType.parse("application/json"), inmueble.getUso());
+            RequestBody precio = RequestBody.create(MediaType.parse("application/json"), precios + "");
+            RequestBody Disponibe = RequestBody.create(MediaType.parse("application/json"), inmueble.getDisponible() + "");
+
+            String rutaArchivo = RealPathUtil.getRealPath(getApplication(), imageUri);
+            File archivo = new File(rutaArchivo);
+
+            RequestBody Imagen = RequestBody.create(MediaType.parse("multipart/form-data"), archivo);
+            MultipartBody.Part ImagenFile = MultipartBody.Part.createFormData("imagenFile", archivo.getName(), Imagen);
+
+            Call<Inmueble> call = api.crearInmueble(token, Direccion,
+                    Ambientes,
+                    Superficie,
+                    Tipo,
+                    Uso,
+                    precio,
+                    Disponibe,
+                    ImagenFile);
+            call.enqueue(new Callback<Inmueble>() {
+                @Override
+                public void onResponse(Call<Inmueble> call, Response<Inmueble> response) {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(getApplication(), "Se agrego correctamente", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Inmueble> call, Throwable throwable) {
-                Toast.makeText(getApplication(),"No se Agrego correctamente",Toast.LENGTH_LONG).show();
-                Log.d("falla",throwable.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<Inmueble> call, Throwable throwable) {
+                    Toast.makeText(getApplication(), "No se Agrego correctamente", Toast.LENGTH_LONG).show();
+                    Log.d("falla", throwable.getMessage());
+                }
+            });
+        }
     }
 }

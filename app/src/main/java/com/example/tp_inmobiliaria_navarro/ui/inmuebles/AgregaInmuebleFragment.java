@@ -62,9 +62,6 @@ public class AgregaInmuebleFragment extends Fragment {
         View root = binding.getRoot();
 
 
-
-
-
         binding.BtAgregarFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,33 +114,20 @@ public class AgregaInmuebleFragment extends Fragment {
         binding.BtAgregarInmueble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               /* String Direccion = binding.EtAgregarDireccion.getText().toString();
-                int Ambientes = Integer.parseInt(binding.EtAgregarAmbiente.getText().toString()+"");
-                int Superficie= Integer.parseInt(binding.EtAgregarSuperficie.getText().toString()+"");
-                double Precio = Double.parseDouble(binding.EtAgregarPrecio.getText().toString()+"");
-                boolean Disponible = false;
-                String Tipo = tipoSelec;
-                String Uso = usoSelec;*/
+
                 String direccion = binding.EtAgregarDireccion.getText().toString();
-                int ambientesStr = Integer.parseInt(binding.EtAgregarAmbiente.getText().toString() + "");
-                int superficieStr = Integer.parseInt(binding.EtAgregarSuperficie.getText().toString() + "");
-                double precioStr = Double.parseDouble(binding.EtAgregarPrecio.getText().toString() + "");
+                String ambientes = (binding.EtAgregarAmbiente.getText().toString()+"");
+                String superficie = (binding.EtAgregarSuperficie.getText().toString()+"");
+                String precio = (binding.EtAgregarPrecio.getText().toString()+"");
                 boolean disponible = false;
                 String tipo = tipoSelec;
                 String uso = usoSelec;
+                    Inmueble inmu = new Inmueble();
+                    inmu.setDisponible(disponible);
+                    inmu.setTipo(tipo);
+                    inmu.setUso(uso);
 
-
-                if (mv.validarCampos(direccion, ambientesStr, superficieStr, precioStr, tipo, uso, imageUri)) {
-                    int ambientes = Integer.parseInt(String.valueOf(ambientesStr));
-                    int superficie = Integer.parseInt(String.valueOf(superficieStr));
-                    double precio = Double.parseDouble(String.valueOf(precioStr));
-
-
-                    Inmueble inmu = new Inmueble(direccion, ambientes, superficie, tipo, uso, precio, disponible);
-                    mv.crearInmuebleRetro(inmu, imageUri);
-
-                }
-
+                    mv.crearInmuebleRetro(inmu,direccion, ambientes,superficie,precio, imageUri);
 
             }
 

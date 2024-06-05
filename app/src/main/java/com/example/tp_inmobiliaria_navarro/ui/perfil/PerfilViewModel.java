@@ -75,7 +75,6 @@ public class PerfilViewModel extends AndroidViewModel {
             if(!Editable.getValue()){
                 Editable.setValue(true);
             }else {
-
             Editable.setValue(false);
             String token = ApiClientRetrofit.leerToken(getApplication());
             if (token != null) {
